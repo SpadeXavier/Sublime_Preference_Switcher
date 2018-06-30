@@ -48,6 +48,12 @@ class Theme_Changer():
             if ans.startswith('y'):
                 os.makedirs(self.user_config)
 
+        settings_files = os.listdir(self.user_config)
+        if settings_files == []:
+            ans = input("\n\nNo files in your preferences directory.\nWould you like to copy over the default sublime preferences file? [Y\\n] ")
+            if ans.startswith('y'):
+                shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.user_config + 'Preferences.sublime-settings')
+
     def backup(self):
         # Copying the sublime preferences file to the current directory for safety
         shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', 'Old_Preferences.sublime-settings')
@@ -129,14 +135,8 @@ class Theme_Changer():
         return (user_theme, user_color)
 
     def get_new_pref_file(self):
-
-        settings_files = os.listdir(self.user_config)
-        if settings_files == []:
-            ans = input("\n\nNo files in your preferences directory.\nWould you like to copy over the default sublime preferences file? [Y\\n] ")
-            if ans.startswith('y'):
-                shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.user_config + 'Preferences.sublime-settings')
-
         os.system('clear')
+        settings_files = os.listdir(self.user_config)
         print('Found {} files in {}'.format(len(settings_files), self.user_config))
         settings_files = os.listdir(self.user_config)
         curr = 1
