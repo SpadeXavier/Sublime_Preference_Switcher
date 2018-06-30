@@ -36,16 +36,17 @@ class Theme_Changer():
         self.file_name = ''
 
     def validate(self):
-        try:
-            self.file_name = sys.argv[1]
-        except IndexError:
-            raise IndexError("Need's a file name!")
-
-        if not os.path.isfile(self.file_name):
-            raise FileNotFoundError("File is not in current directory!")
-
+        if not os.path.isdir(self.sub_dir):
+            raise FileNotFoundError("Can't find sublime config directory in {}".format(self.sub_dir))
+        if not os.path.isdir(self.package_dir):
+            raise FileNotFoundError("Can't find sublime installed packages directory at {}".format(self.package_dir))
         if not os.path.isdir(self.pref_dir):
-            raise FileNotFoundError("Sublime configuration directory not in default location!")
+            raise FileNotFoundError("Can't find sublime user packages directory at {}".format(self.pref_dir))
+
+        if not os.path.exists(self.user_config):
+            ans = input("\nThere is not directory for your preferences.\nWould you like to create one in " + self.user_config + "? [Y\\n] ")
+            if ans.startswith('y'):
+                os.makedirs(self.user_config)
 
     def backup(self):
         # Copying the sublime preferences file to the current directory for safety
@@ -128,21 +129,12 @@ class Theme_Changer():
         return (user_theme, user_color)
 
     def get_new_pref_file(self):
-        # Maybe this adding of the config directory and default preferences should be in the pacman package?
-        if not os.path.exists(self.user_config):
-            ans = input("\nThere is not directory for your preferences.\nWould you like to create one in " + self.user_config + "? [Y\\n] ")
-            if ans.startswith('y'):
-                os.makedirs(self.user_config)
-            else:
-                return
 
         settings_files = os.listdir(self.user_config)
         if settings_files == []:
             ans = input("\n\nNo files in your preferences directory.\nWould you like to copy over the default sublime preferences file? [Y\\n] ")
             if ans.startswith('y'):
                 shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.user_config + 'Preferences.sublime-settings')
-            else:
-                return
 
         os.system('clear')
         print('Found {} files in {}'.format(len(settings_files), self.user_config))
@@ -193,6 +185,7 @@ class Theme_Changer():
 
 
 theme_changer = Theme_Changer()
+theme_changer.validate()
 themes = theme_changer.find_themes(theme_changer.package_dir)
 user_pref_file = theme_changer.get_new_pref_file()
 theme_changer.update_user_pref_file(user_pref_file, themes)
