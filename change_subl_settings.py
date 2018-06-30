@@ -1,11 +1,5 @@
 #!/usr/bin/python
 
-# To Do:
-# Tell the user where the default directory for searching for .sublime-settings are and then give them the themes in that directory
-# Users can then select a theme and this script will change the sublime theme to that one
-
-# To expand on this, make a pacman package that will install this script on the system and also create a directory to house user settings in .config/
-
 import os
 import shutil
 import sys
@@ -56,7 +50,7 @@ class Theme_Changer():
 
     def backup(self):
         # Copying the sublime preferences file to the current directory for safety
-        shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', 'Old_Preferences.sublime-settings')
+        shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.usr_config + 'Old_Preferences.sublime-settings')
 
     def move_preferences(self, user_pref_file):
         # Copying new file to sublime preferences
