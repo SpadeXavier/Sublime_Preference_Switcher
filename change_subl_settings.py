@@ -50,7 +50,7 @@ class Theme_Changer():
 
     def backup(self):
         # Copying the sublime preferences file to the current directory for safety
-        shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.usr_config + 'Old_Preferences.sublime-settings')
+        shutil.copyfile(self.pref_dir + 'Preferences.sublime-settings', self.user_config + 'Old_Preferences.sublime-settings')
 
     def move_preferences(self, user_pref_file):
         # Copying new file to sublime preferences
